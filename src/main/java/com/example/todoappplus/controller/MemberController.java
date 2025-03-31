@@ -1,4 +1,5 @@
 package com.example.todoappplus.controller;
+import com.example.todoappplus.dto.memberDto.MemberRequestDto;
 import com.example.todoappplus.dto.memberDto.MemberResponseDto;
 import com.example.todoappplus.dto.memberDto.SignUpRequestDto;
 import com.example.todoappplus.dto.memberDto.SignUpResponseDto;
@@ -36,5 +37,17 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> findMemberById(@PathVariable Long id){
         MemberResponseDto memberResponseDto = memberService.findMemberById(id);
         return new ResponseEntity<>(memberResponseDto, HttpStatus.OK);
+    }
+
+
+    //회원 정보 삭제 by 이메일&비번
+    @DeleteMapping
+    public ResponseEntity<Boolean> deleteMemberById(@RequestBody MemberRequestDto dto){
+        boolean result = memberService.delete(dto.getEmail(), dto.getPassword());
+        if (result){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
