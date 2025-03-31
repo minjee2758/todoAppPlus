@@ -27,7 +27,9 @@ public class Member extends BaseEntity {
         this.email = email;
     }
 
-    public Member() {
+    public Member() {}
 
+    public void updatePassword(String password){
+        this.password = password;
     }
 }

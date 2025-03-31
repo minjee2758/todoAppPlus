@@ -2,6 +2,7 @@ package com.example.todoappplus.service;
 
 import com.example.todoappplus.dto.memberDto.MemberResponseDto;
 import com.example.todoappplus.dto.memberDto.SignUpResponseDto;
+import com.example.todoappplus.dto.memberDto.UpdatePasswordResponseDto;
 import com.example.todoappplus.entity.Member;
 import com.example.todoappplus.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,21 @@ public class MemberService {
         String findPw = memberRepository.findMemberdByEmail(email).get().getPassword();
         if (findPw.equals(password)){
             memberRepository.delete(memberRepository.findMemberdByEmail(email).get());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    //이메일과 기존 비번 바꿀 비번을 입력해, 만약 기존 비번이 일치하면 비번 바꿔주기
+    public boolean updateMemberPassword(String email, String oldPassword,String newPassword) {
+        String findPw = memberRepository.findMemberdByEmail(email).get().getPassword();
+        Member member = memberRepository.findMemberdByEmail(email).get();
+        if (findPw.equals(oldPassword)){
+            member.updatePassword(newPassword);
+            memberRepository.save(member);
             return true;
         } else {
             return false;

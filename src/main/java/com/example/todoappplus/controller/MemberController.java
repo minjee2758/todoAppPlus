@@ -1,8 +1,5 @@
 package com.example.todoappplus.controller;
-import com.example.todoappplus.dto.memberDto.MemberRequestDto;
-import com.example.todoappplus.dto.memberDto.MemberResponseDto;
-import com.example.todoappplus.dto.memberDto.SignUpRequestDto;
-import com.example.todoappplus.dto.memberDto.SignUpResponseDto;
+import com.example.todoappplus.dto.memberDto.*;
 import com.example.todoappplus.entity.Member;
 import com.example.todoappplus.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +36,17 @@ public class MemberController {
         return new ResponseEntity<>(memberResponseDto, HttpStatus.OK);
     }
 
+    //회원 비번 수정 by 이메일 & 비번
+    @PutMapping
+    public ResponseEntity<Boolean> updateMemberPassword(@RequestBody UpdatePasswordResponseDto dto){
+        boolean result = memberService.updateMemberPassword(dto.getEmail(), dto.getOldPassword(), dto.getNewPassword());
+        if (result){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
 
     //회원 정보 삭제 by 이메일&비번
     @DeleteMapping
