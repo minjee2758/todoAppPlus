@@ -31,4 +31,10 @@ public class TodoService {
         List<Todo> todos = todoRepository.findAll();
         return todos.stream().map(todo -> new TodoResponseDto(todo.getTitle(),todo.getContent(), todo.getMember().getName())).toList();
     }
+
+    public List<TodoResponseDto> findTodoByName(String name) {
+        Long memberid = memberRepository.findMemberByNameOrElseThrow(name).getId();
+        List<Todo> todos = todoRepository.findTodoById(memberid);
+        return todos.stream().map(todo -> new TodoResponseDto(todo.getTitle(), todo.getContent(), todo.getMember().getName())).toList();
+    }
 }

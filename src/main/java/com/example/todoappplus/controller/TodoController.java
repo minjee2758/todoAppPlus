@@ -30,4 +30,11 @@ public class TodoController {
         List<TodoResponseDto> todos = todoService.findAllTodo();
         return new ResponseEntity<>(todos, HttpStatus.OK);
     }
+
+    //회원별 일정 조회하기
+    @GetMapping
+    public ResponseEntity<List<TodoResponseDto>> findTodoByName(@RequestBody TodoRequestDto dto){
+        List<TodoResponseDto> todos = todoService.findTodoByName(dto.getName());
+        return new ResponseEntity<>(todos, HttpStatus.OK);
+    }
 }
