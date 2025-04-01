@@ -30,4 +30,9 @@ public class Todo extends BaseEntity{
     }
 
     public Todo(){}
+
+
+    public void setMember(Member member){
+        this.member = member;
+    }
 }

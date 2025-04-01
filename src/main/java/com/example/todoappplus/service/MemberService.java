@@ -44,8 +44,6 @@ public class MemberService {
         }
     }
 
-
-
     //이메일과 기존 비번 바꿀 비번을 입력해, 만약 기존 비번이 일치하면 비번 바꿔주기
     public boolean updateMemberPassword(String email, String oldPassword,String newPassword) {
         String findPw = memberRepository.findMemberdByEmail(email).get().getPassword();
@@ -58,4 +56,5 @@ public class MemberService {
             return false;
         }
     }
+
 }

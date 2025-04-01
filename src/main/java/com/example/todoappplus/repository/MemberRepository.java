@@ -13,4 +13,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     }
     //이메일주소로 회원조회하기
     Optional<Member> findMemberdByEmail(String email);
+
+    Optional<Member> findMemberByName(String name);
+
+    default Member findMemberByNameOrElseThrow(String name){
+        return findMemberByName(name).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다"));
+    };
 }
