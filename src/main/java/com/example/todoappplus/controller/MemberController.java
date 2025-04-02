@@ -1,7 +1,12 @@
 package com.example.todoappplus.controller;
+import com.example.todoappplus.common.Const;
 import com.example.todoappplus.dto.memberDto.*;
 import com.example.todoappplus.entity.Member;
 import com.example.todoappplus.service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +25,33 @@ public class MemberController {
     public ResponseEntity<SignUpResponseDto> signUp(@RequestBody SignUpRequestDto dto) {
         SignUpResponseDto signUpResponseDto = memberService.signUp(dto.getName(), dto.getPassword(), dto.getEmail());
         return new ResponseEntity<>(signUpResponseDto, HttpStatus.CREATED);
+    }
+
+    //로그인
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody MemberRequestDto dto,
+                                        HttpServletRequest request,
+                                        HttpServletResponse response) {
+
+        Member member = memberService.login(dto.getEmail(), dto.getPassword()); //회원이 존재하는지 검증
+        HttpSession session = request.getSession(); //세션 요청하기
+        session.setAttribute(Const.LOGIN_USER, member.getId());
+
+        return ResponseEntity.ok("로그인 성공");
+    }
+
+    //로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        // 로그인하지 않으면 HttpSession이 null로 반환된다.
+        HttpSession session = request.getSession(false);
+        // 세션이 존재하면 -> 로그인이 된 경우
+        if(session != null) {
+            session.invalidate(); // 해당 세션(데이터)을 삭제한다.
+            return ResponseEntity.ok("로그아웃 성공");
+        } else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     //모든 회원 조회하기

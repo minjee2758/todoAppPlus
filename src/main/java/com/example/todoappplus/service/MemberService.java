@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -57,4 +58,17 @@ public class MemberService {
         }
     }
 
+    //회원가입된 회원이 맞는지 검증
+    public Member login(String email, String password) {
+        Optional<Member> member = memberRepository.findMemberdByEmail(email);
+        if (member.isPresent()) {
+            if (member.get().getPassword().equals(password)) {
+                return member.get();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
 }
