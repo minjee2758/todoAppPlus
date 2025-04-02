@@ -3,14 +3,15 @@ package com.example.todoappplus.dto.todoDto;
 import lombok.Getter;
 
 @Getter
-public class TodoResponseDto {
+public class UpdateTodoResponseDto {
     private final String title;
-    private final String content;
+    private final String contents;
     private final String name;
 
-    public TodoResponseDto(String name, String title, String content) {
+
+    public UpdateTodoResponseDto(String title, String contents, String name) {
         this.title = title;
-        this.content = content;
+        this.contents = contents;
         this.name = name;
     }
 }

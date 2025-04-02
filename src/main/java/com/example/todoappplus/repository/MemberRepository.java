@@ -11,6 +11,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     default Member findMemberByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "입력하신 id의 회원은 존재하지 않습니다"));
     }
+
     //이메일주소로 회원조회하기
     Optional<Member> findMemberdByEmail(String email);
 

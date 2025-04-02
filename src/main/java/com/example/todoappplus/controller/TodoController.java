@@ -2,7 +2,7 @@ package com.example.todoappplus.controller;
 
 import com.example.todoappplus.dto.todoDto.TodoRequestDto;
 import com.example.todoappplus.dto.todoDto.TodoResponseDto;
-import com.example.todoappplus.entity.Todo;
+import com.example.todoappplus.dto.todoDto.UpdateTodoResponseDto;
 import com.example.todoappplus.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class TodoController {
     //일정 생성하기
     @PostMapping
     public ResponseEntity<TodoResponseDto> postTodo(@RequestBody TodoRequestDto dto){
-        TodoResponseDto todoResponseDto = todoService.postTodo(dto.getName(), dto.getTitle(), dto.getContents());
+        TodoResponseDto todoResponseDto = todoService.postTodo(dto.getName(), dto.getTitle(), dto.getContent());
         return new ResponseEntity<>(todoResponseDto, HttpStatus.CREATED);
     }
 
@@ -31,10 +31,24 @@ public class TodoController {
         return new ResponseEntity<>(todos, HttpStatus.OK);
     }
 
-    //회원별 일정 조회하기
-    @GetMapping
+    //회원별 일정 조회하기 - 이름으로 조회가능 url = "/todo/name"
+    @GetMapping("/name")
     public ResponseEntity<List<TodoResponseDto>> findTodoByName(@RequestBody TodoRequestDto dto){
         List<TodoResponseDto> todos = todoService.findTodoByName(dto.getName());
         return new ResponseEntity<>(todos, HttpStatus.OK);
+    }
+
+    //일정 수정하기 - url= "/todo/update"
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UpdateTodoResponseDto> updateTodo(@PathVariable Long id, @RequestBody TodoRequestDto dto){
+        UpdateTodoResponseDto updateTodoResponseDto = todoService.updateTodo(dto.getEmail(), dto.getPassword(), id, dto.getContent());
+        return new ResponseEntity<>(updateTodoResponseDto, HttpStatus.OK);
+    }
+
+    //일정 삭제하기 - url = "/todo/delete"
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteTodo(@RequestBody TodoRequestDto dto, @PathVariable Long id){
+        boolean result = todoService.deleteTodo(dto.getEmail(), dto.getPassword(), id);
+        return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
     }
 }
