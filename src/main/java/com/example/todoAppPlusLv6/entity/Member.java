@@ -1,6 +1,7 @@
 package com.example.todoAppPlusLv6.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -21,8 +22,7 @@ public class Member extends BaseEntity {
     private String name;
 
     @NotBlank //공백도 안됨
-    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{4,10}"
-            , message = "비밀번호는 4~10자, 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
+    @Size(min = 4, message = "비번은 최소 4글자입니다")
     @Column(nullable = false)
     private String password;
 
