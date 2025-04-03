@@ -14,7 +14,7 @@ public class Member extends BaseEntity {
     private Long id;
 
     @NotBlank(message = "이름은 공백일 수 없습니다. 4글자 이하로 입력하세요")
-    @Max(value = 4,message = "4글자 이하로 입력해주세요")
+    @Size(min = 2, message = "2글자 이상 입력하세요")
     @Column(nullable = false, unique = true)
     private String name;
 
@@ -25,7 +25,7 @@ public class Member extends BaseEntity {
     private String password;
 
 
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,10}$"
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,20}$"
             , message = "이메일 형식이 올바르지 않습니다.")
     @NotBlank(message = "이메일은 공백일 수 없습니다")
     @Column(nullable = false, unique = true)
