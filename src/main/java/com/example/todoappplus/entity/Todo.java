@@ -1,6 +1,10 @@
 package com.example.todoappplus.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,14 +16,16 @@ public class Todo extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotBlank(message = "제목은 공백일 수 없습니다")
+    @Max(value = 10, message = "제목은 최대 10글자로 작성할 수 있습니다")
     @Column(nullable = false)
     private String title;
 
+    @NotNull(message = "내용은 공백이라도 존재해야합니다")
     @Column(columnDefinition = "longtext")
     private String content;
 

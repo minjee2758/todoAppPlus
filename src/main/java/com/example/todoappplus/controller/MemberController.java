@@ -34,6 +34,9 @@ public class MemberController {
                                         HttpServletResponse response) {
 
         Member member = memberService.login(dto.getEmail(), dto.getPassword()); //회원이 존재하는지 검증
+        if (member == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); //존재하지 않으면 401에러 반환
+        }
         HttpSession session = request.getSession(); //세션 요청하기
         session.setAttribute(Const.LOGIN_USER, member.getId());
 

@@ -2,12 +2,12 @@ package com.example.todoappplus.service;
 
 import com.example.todoappplus.dto.memberDto.MemberResponseDto;
 import com.example.todoappplus.dto.memberDto.SignUpResponseDto;
-import com.example.todoappplus.dto.memberDto.UpdatePasswordResponseDto;
 import com.example.todoappplus.entity.Member;
+import com.example.todoappplus.exception.CustomException;
+import com.example.todoappplus.exception.Errors;
 import com.example.todoappplus.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,15 +60,11 @@ public class MemberService {
 
     //회원가입된 회원이 맞는지 검증
     public Member login(String email, String password) {
-        Optional<Member> member = memberRepository.findMemberdByEmail(email);
-        if (member.isPresent()) {
-            if (member.get().getPassword().equals(password)) {
-                return member.get();
-            } else {
-                return null;
-            }
+        Optional<Member> member = Optional.ofNullable(memberRepository.findMemberdByEmail(email).orElseThrow(() -> new CustomException(Errors.INVALID_LOGIN)));
+        if (member.get().getPassword().equals(password)) {
+            return member.get();
         } else {
-            return null;
+            throw new CustomException(Errors.INVALID_LOGIN);
         }
     }
 }
