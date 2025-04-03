@@ -1,13 +1,16 @@
 package com.example.todoappplus.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -23,11 +26,40 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-//        log.error("MethodArgumentNotValidException: {}", e.getMessage());
-//        List<ErrorResponse.FieldError> fieldErrors = processFieldErrors(e.getBindingResult());
-//        ErrorResponse response = ErrorResponse.of(Errors.INVALID_INPUT_VALUE, fieldErrors);
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("MethodArgumentNotValidException: {}", e.getMessage());
+        List<ErrorResponse.FieldError> fieldErrors = processFieldErrors(e.getBindingResult());
+        ErrorResponse response = ErrorResponse.of(Errors.INVALID_INPUT_VALUE, fieldErrors);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    //유효성 검사(@Min, @NotNull, @Email 등)를 위반했을때
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+        log.error("ConstraintViolationException: {}", e.getMessage());
+        List<ErrorResponse.FieldError> fieldErrors = e.getConstraintViolations().stream().map(
+                constraintViolation -> ErrorResponse.FieldError.of(
+                        constraintViolation.getPropertyPath().toString(),
+                        constraintViolation.getInvalidValue() != null ? constraintViolation.getInvalidValue().toString() : "",
+                        constraintViolation.getMessage()
+                )
+        ).collect(Collectors.toList());
+        ErrorResponse response = ErrorResponse.of(Errors.INVALID_INPUT_VALUE, fieldErrors);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+    }
+
+
+
+
+    private List<ErrorResponse.FieldError> processFieldErrors(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors().stream()
+                .map(error -> ErrorResponse.FieldError.of(
+                        error.getField(),
+                        error.getRejectedValue() != null ? error.getRejectedValue().toString() : "",
+                        error.getDefaultMessage()
+                ))
+                .collect(Collectors.toList());
+    }
     }
