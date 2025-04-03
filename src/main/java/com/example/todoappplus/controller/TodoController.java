@@ -4,6 +4,7 @@ import com.example.todoappplus.dto.todoDto.TodoRequestDto;
 import com.example.todoappplus.dto.todoDto.TodoResponseDto;
 import com.example.todoappplus.dto.todoDto.UpdateTodoResponseDto;
 import com.example.todoappplus.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class TodoController {
 
     //일정 생성하기
     @PostMapping
-    public ResponseEntity<TodoResponseDto> postTodo(@RequestBody TodoRequestDto dto){
+    public ResponseEntity<TodoResponseDto> postTodo(@Valid @RequestBody TodoRequestDto dto, Error error){
         TodoResponseDto todoResponseDto = todoService.postTodo(dto.getName(), dto.getTitle(), dto.getContent());
         return new ResponseEntity<>(todoResponseDto, HttpStatus.CREATED);
     }
