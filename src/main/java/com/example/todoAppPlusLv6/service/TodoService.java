@@ -1,5 +1,6 @@
 package com.example.todoAppPlusLv6.service;
 
+import com.example.todoAppPlusLv6.config.PasswordEncoder;
 import com.example.todoAppPlusLv6.dto.todoDto.TodoResponseDto;
 import com.example.todoAppPlusLv6.dto.todoDto.UpdateTodoResponseDto;
 import com.example.todoAppPlusLv6.entity.Member;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TodoService {
     private final TodoRepository todoRepository;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //일정 생성하기
     public TodoResponseDto postTodo(String name, String title, String content) {
@@ -45,7 +47,8 @@ public class TodoService {
     public boolean deleteTodo(String email, String password, Long id) {
         //비번 검증
         String savedMemberPw = memberRepository.findMemberdByEmail(email).get().getPassword();
-        if (savedMemberPw.equals(password)) {
+        boolean isSame = passwordEncoder.matches(password, savedMemberPw);
+        if (isSame) {
             Todo todo = todoRepository.findTodoById(id);
             todoRepository.delete(todo);
             System.out.println(" 할일 id : "+id+" 가 삭제되었습니다");
@@ -59,7 +62,8 @@ public class TodoService {
     public UpdateTodoResponseDto updateTodo(String email, String password, Long todoId, String content) {
         //비번 검증
         String savedMemberPw = memberRepository.findMemberdByEmail(email).get().getPassword();
-        if (savedMemberPw.equals(password)) {
+        boolean isSame = passwordEncoder.matches(password, savedMemberPw);
+        if (isSame) {
             //해당하는 id의 할일 찾기
             Todo todo = todoRepository.findTodoById(todoId);
             todo.updateContent(content);
