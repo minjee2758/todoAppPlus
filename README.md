@@ -5,7 +5,14 @@
 Session 인증, 로그인 예외 처리, 비밀번호 암호화 등의 기능이 있습니다!
 
 ## 📄 API문서
-<a herf ="https://lace-zenith-49f.notion.site/1cac1a66561280428efced02d40b9a5f?v=1cac1a66561280738f9a000c615c1a01"> API문서 보러가기 </a>
+<a href ="https://lace-zenith-49f.notion.site/1cac1a66561280428efced02d40b9a5f?v=1cac1a66561280738f9a000c615c1a01"> API문서 보러가기 </a>
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/0917b08a-809d-43d6-a447-8c18670b9409" />
+
+
+## ERD
+<img width="507" alt="image" src="https://github.com/user-attachments/assets/0716efd3-1ede-4666-9dbb-b0bd945f2b4a" />
+
 
 ## 🚀 주요 기능
 ### **✅ 일정 (Todo) 관리**
